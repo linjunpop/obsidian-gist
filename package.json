@@ -1,14 +1,16 @@
 {
-  "name": "obsidian-sample-plugin",
+  "name": "obsidian-gist",
   "version": "0.12.0",
-  "description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+  "description": "This is a plugin to display the Github Gist (https://gist.github.com) in Obsidian (https://obsidian.md).",
   "main": "main.js",
   "scripts": {
     "dev": "rollup --config rollup.config.js -w",
     "build": "rollup --config rollup.config.js --environment BUILD:production"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "obsidian"
+  ],
+  "author": "Jun Lin",
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^18.0.0",

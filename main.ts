@@ -1,56 +1,40 @@
-import { App, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
-interface MyPluginSettings {
+interface GistPluginSettings {
 	mySetting: string;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
+const DEFAULT_SETTINGS: GistPluginSettings = {
 	mySetting: 'default'
 }
 
-export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+export default class GistPlugin extends Plugin {
+	settings: GistPluginSettings;
 
 	async onload() {
-		console.log('loading plugin');
-
 		await this.loadSettings();
+		this.addSettingTab(new GistPluginSettingTab(this.app, this));
 
-		this.addRibbonIcon('dice', 'Sample Plugin', () => {
-			new Notice('This is a notice!');
-		});
+		this.registerMarkdownCodeBlockProcessor("gist", async (sourceString: string, el, ctx) => {
+			// Extract gist info from the block
+			// FIXME: now, only the first line of the gist is valid, support multi-line?
+			const gistInfo = sourceString.split("\n")[0]
+			const [gistId, fileName] = gistInfo.split('#')
 
-		this.addStatusBarItem().setText('Status Bar Text');
+			let gistURL = `https://gist.github.com/${gistId}.json`
 
-		this.addCommand({
-			id: 'open-sample-modal',
-			name: 'Open Sample Modal',
-			// callback: () => {
-			// 	console.log('Simple Callback');
-			// },
-			checkCallback: (checking: boolean) => {
-				let leaf = this.app.workspace.activeLeaf;
-				if (leaf) {
-					if (!checking) {
-						new SampleModal(this.app).open();
-					}
-					return true;
-				}
-				return false;
+			if (fileName !== undefined) {
+				gistURL = `${gistURL}?file=${fileName}`
 			}
+
+			fetch(gistURL)
+				.then(response => response.json())
+				.then(gistJSON => {
+					this._insertGistElement(el, gistJSON)
+				}).catch(error => {
+					this._showError(el, gistInfo)
+				})
 		});
-
-		this.addSettingTab(new SampleSettingTab(this.app, this));
-
-		this.registerCodeMirror((cm: CodeMirror.Editor) => {
-			console.log('codemirror', cm);
-		});
-
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			console.log('click', evt);
-		});
-
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 	}
 
 	onunload() {
@@ -64,38 +48,42 @@ export default class MyPlugin extends Plugin {
 	async saveSettings() {
 		await this.saveData(this.settings);
 	}
+
+	// private
+
+	_insertGistElement(el: HTMLElement, gistJSON: any) {
+		// build container div
+		const containerDiv = document.createElement('section');
+		containerDiv.innerHTML = gistJSON.div
+
+		// build stylesheet link
+		const stylesheetLink = document.createElement('link');
+		stylesheetLink.rel = "stylesheet";
+		stylesheetLink.href = gistJSON.stylesheet
+
+		el.appendChild(containerDiv)
+		el.appendChild(stylesheetLink)
+	}
+
+	_showError(el: HTMLElement, gistInfo: String) {
+		el.createEl('pre', { text: `Failed to load the Gist (${gistInfo}).` })
+	}
 }
 
-class SampleModal extends Modal {
-	constructor(app: App) {
-		super(app);
-	}
+class GistPluginSettingTab extends PluginSettingTab {
+	plugin: GistPlugin;
 
-	onOpen() {
-		let {contentEl} = this;
-		contentEl.setText('Woah!');
-	}
-
-	onClose() {
-		let {contentEl} = this;
-		contentEl.empty();
-	}
-}
-
-class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
-
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: GistPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
 
 	display(): void {
-		let {containerEl} = this;
+		let { containerEl } = this;
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
+		containerEl.createEl('h2', { text: 'Settings for the Gist plugin.' });
 
 		new Setting(containerEl)
 			.setName('Setting #1')
