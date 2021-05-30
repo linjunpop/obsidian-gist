@@ -22,6 +22,7 @@ The `gist` fenced code blocks will be rendered as a embed Gist view.
 
    ```gist
    linjunpop/30efbfd874fb1a16176d3f638a1e712a#math.ex
+   30efbfd874fb1a16176d3f638a1e712a#concat.ex
    ```
 
 ![Example Image](https://user-images.githubusercontent.com/214616/120093926-f90eb580-c14f-11eb-94e3-a414c7528aef.png)
