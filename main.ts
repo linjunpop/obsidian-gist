@@ -1,20 +1,7 @@
-import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
-
-interface GistPluginSettings {
-	mySetting: string;
-}
-
-const DEFAULT_SETTINGS: GistPluginSettings = {
-	mySetting: 'default'
-}
+import { Plugin } from 'obsidian';
 
 export default class GistPlugin extends Plugin {
-	settings: GistPluginSettings;
-
 	async onload() {
-		await this.loadSettings();
-		this.addSettingTab(new GistPluginSettingTab(this.app, this));
-
 		this.registerMarkdownCodeBlockProcessor("gist", async (sourceString: string, el, ctx) => {
 			// Extract gist info from the block
 			// FIXME: now, only the first line of the gist is valid, support multi-line?
@@ -41,16 +28,7 @@ export default class GistPlugin extends Plugin {
 		console.log('unloading plugin');
 	}
 
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
-
-	async saveSettings() {
-		await this.saveData(this.settings);
-	}
-
 	// private
-
 	_insertGistElement(el: HTMLElement, gistJSON: any) {
 		// build container div
 		const containerDiv = document.createElement('section');
@@ -67,34 +45,5 @@ export default class GistPlugin extends Plugin {
 
 	_showError(el: HTMLElement, gistInfo: String) {
 		el.createEl('pre', { text: `Failed to load the Gist (${gistInfo}).` })
-	}
-}
-
-class GistPluginSettingTab extends PluginSettingTab {
-	plugin: GistPlugin;
-
-	constructor(app: App, plugin: GistPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
-
-	display(): void {
-		let { containerEl } = this;
-
-		containerEl.empty();
-
-		containerEl.createEl('h2', { text: 'Settings for the Gist plugin.' });
-
-		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue('')
-				.onChange(async (value) => {
-					console.log('Secret: ' + value);
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
 	}
 }
