@@ -10,22 +10,28 @@ The `gist` fenced code blocks will be rendered as a embed Gist view.
 
 1. With only the Gist ID:
 
-   ```gist
-   30efbfd874fb1a16176d3f638a1e712a
-   ```
+````
+```gist
+30efbfd874fb1a16176d3f638a1e712a
+```
+````
 
 2. With the username and Gist ID:
 
-   ```gist
-   linjunpop/30efbfd874fb1a16176d3f638a1e712a
-   ```
+````
+```gist
+linjunpop/30efbfd874fb1a16176d3f638a1e712a
+```
+````
 
 3. Specify to only show a single file in the Gist:
 
-   ```gist
-   linjunpop/30efbfd874fb1a16176d3f638a1e712a#math.ex
-   30efbfd874fb1a16176d3f638a1e712a#concat.ex
-   ```
+````
+```gist
+linjunpop/30efbfd874fb1a16176d3f638a1e712a#math.ex
+30efbfd874fb1a16176d3f638a1e712a#concat.ex
+```
+````
 
 ![Example Image](https://user-images.githubusercontent.com/214616/120093926-f90eb580-c14f-11eb-94e3-a414c7528aef.png)
 
@@ -54,3 +60,7 @@ The `gist` fenced code blocks will be rendered as a embed Gist view.
 - Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
 - Upload the files `manifest.json`, `main.js` as binary attachments.
 - Publish the release.
+
+```
+
+```
