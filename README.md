@@ -39,7 +39,7 @@ The `gist` fenced code blocks will be rendered as a embed Gist view.
 
 ### Develop the plugin locally
 
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
+- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/obsidian-gist` folder.
 - Install NodeJS, then run `npm i` in the command line under your repo folder.
 - Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
 - Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
