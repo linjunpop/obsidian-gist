@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.3.0
+
 - Allow to render multiple gists in the fenced code.
 
 ## 0.2.0
