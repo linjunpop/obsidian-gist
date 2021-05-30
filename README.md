@@ -2,6 +2,28 @@
 
 This is a plugin to display the [GitHub Gist](https://gist.github.com) in [Obsidian](https://obsidian.md).
 
+## Example
+
+The `gist` fenced code blocks will be rendered as a embed Gist view.
+
+1. With only the Gist ID:
+
+   ```gist
+   30efbfd874fb1a16176d3f638a1e712a
+   ```
+
+2. With the username and Gist ID:
+
+   ```gist
+   linjunpop/30efbfd874fb1a16176d3f638a1e712a
+   ```
+
+3. Specify to only show a single file in the Gist:
+
+   ```gist
+   linjunpop/30efbfd874fb1a16176d3f638a1e712a#math.ex
+   ```
+
 ![Example Image](https://user-images.githubusercontent.com/214616/120093926-f90eb580-c14f-11eb-94e3-a414c7528aef.png)
 
 ## Installation
