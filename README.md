@@ -1,5 +1,7 @@
 # Obsidian GitHub Gist Plugin
 
+![GitHub release badge](https://badgen.net/github/release/linjunpop/obsidian-gist)
+
 This is a plugin to display the [GitHub Gist](https://gist.github.com) in [Obsidian](https://obsidian.md).
 
 ## Example
