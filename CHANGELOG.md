@@ -2,6 +2,8 @@
 
 ## master
 
+- Allow to render a gist with full URL.
+
 ## 0.3.0
 
 - Allow to render multiple gists in the fenced code.

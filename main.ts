@@ -1,3 +1,4 @@
+import { match } from 'assert';
 import { Plugin } from 'obsidian';
 
 type GistJSON = {
@@ -27,12 +28,20 @@ export default class GistPlugin extends Plugin {
 	// private
 
 	_processLineItem(el: HTMLElement, gistIDAndFilename: string) {
-		const [gistId, fileName] = gistIDAndFilename.split('#')
+		// const [gistId, fileName] = gistIDAndFilename.split('#')
+		const pattern = /(?<protocol>https?:\/\/)?(?<host>gist\.github\.com\/)?((?<username>\w+)\/)?(?<gistID>\w+)(\#(?<filename>.+))?/
 
-		let gistURL = `https://gist.github.com/${gistId}.json`
+		const matchResult = gistIDAndFilename.match(pattern).groups
 
-		if (fileName !== undefined) {
-			gistURL = `${gistURL}?file=${fileName}`
+		if (matchResult.gistID === undefined) {
+			this._showError(el, gistIDAndFilename)
+			return
+		}
+
+		let gistURL = `https://gist.github.com/${matchResult.gistID}.json`
+
+		if (matchResult.filename !== undefined) {
+			gistURL = `${gistURL}?file=${matchResult.filename}`
 		}
 
 		fetch(gistURL)
