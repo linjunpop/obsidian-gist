@@ -1,78 +1,84 @@
-import { match } from 'assert';
 import { Plugin } from 'obsidian';
 
 type GistJSON = {
-	description: string,
-	public: Boolean,
-	created_at: string,
-	files: [string],
-	owner: string,
-	div: string,
-	stylesheet: string
+  description: string,
+  public: Boolean,
+  created_at: string,
+  files: [string],
+  owner: string,
+  div: string,
+  stylesheet: string
 }
 
 export default class GistPlugin extends Plugin {
-	async onload() {
-		this.registerMarkdownCodeBlockProcessor("gist", async (sourceString: string, el, ctx) => {
-			const gists = sourceString.trim().split("\n")
+  async onload() {
+    this.registerMarkdownCodeBlockProcessor("gist", async (sourceString: string, el, ctx) => {
+      const gists = sourceString.trim().split("\n")
 
-			gists.forEach(lineItem => {
-				this._processLineItem(el, lineItem)
-			});
-		});
-	}
+      await Promise.all(
+        gists.map(async (gist) => {
+          this._processGist(el, gist)
+        })
+      )
+    });
+  }
 
-	onunload() {
-	}
+  onunload() {
+  }
 
-	// private
+  // private
 
-	_processLineItem(el: HTMLElement, gistIDAndFilename: string) {
-		// const [gistId, fileName] = gistIDAndFilename.split('#')
-		const pattern = /(?<protocol>https?:\/\/)?(?<host>gist\.github\.com\/)?((?<username>\w+)\/)?(?<gistID>\w+)(\#(?<filename>.+))?/
+  async _processGist(el: HTMLElement, gist: string) {
+    // const [gistId, fileName] = gistIDAndFilename.split('#')
+    const pattern = /(?<protocol>https?:\/\/)?(?<host>gist\.github\.com\/)?((?<username>\w+)\/)?(?<gistID>\w+)(\#(?<filename>.+))?/
 
-		const matchResult = gistIDAndFilename.match(pattern).groups
+    const matchResult = gist.match(pattern).groups
 
-		if (matchResult.gistID === undefined) {
-			this._showError(el, gistIDAndFilename)
-			return
-		}
+    if (matchResult.gistID === undefined) {
+      this._showError(el, gist)
+      return
+    }
 
-		let gistURL = `https://gist.github.com/${matchResult.gistID}.json`
+    let gistURL = `https://gist.github.com/${matchResult.gistID}.json`
 
-		if (matchResult.filename !== undefined) {
-			gistURL = `${gistURL}?file=${matchResult.filename}`
-		}
+    if (matchResult.filename !== undefined) {
+      gistURL = `${gistURL}?file=${matchResult.filename}`
+    }
 
-		fetch(gistURL)
-			.then(response => response.json())
-			.then(gistJSON => {
-				this._insertGistElement(el, gistJSON as GistJSON)
-			}).catch(error => {
-				this._showError(el, gistIDAndFilename)
-			})
-	}
+    try {
+      const response = await fetch(gistURL)
 
-	_insertGistElement(el: HTMLElement, gistJSON: GistJSON) {
-		// build div
-		const divEl = document.createElement('div');
-		divEl.innerHTML = gistJSON.div
+      if (response.ok) {
+        const gistJSON = await response.json()
+        await this._insertGistElement(el, gistJSON as GistJSON)
+      } else {
+        await this._showError(el, gist)
+      }
+    } catch (error) {
+      await this._showError(el, gist)
+    }
+  }
 
-		// build stylesheet link
-		const stylesheetLink = document.createElement('link');
-		stylesheetLink.rel = "stylesheet";
-		stylesheetLink.href = gistJSON.stylesheet
+  async _insertGistElement(el: HTMLElement, gistJSON: GistJSON) {
+    // build div
+    const divEl = document.createElement('div');
+    divEl.innerHTML = gistJSON.div
 
-		// container
-		const containerDiv = document.createElement('section');
-		containerDiv.appendChild(divEl)
-		containerDiv.appendChild(stylesheetLink)
+    // build stylesheet link
+    const stylesheetLink = document.createElement('link');
+    stylesheetLink.rel = "stylesheet";
+    stylesheetLink.href = gistJSON.stylesheet
 
-		// insert into the DOM
-		el.appendChild(containerDiv)
-	}
+    // container
+    const containerDiv = document.createElement('section');
+    containerDiv.appendChild(divEl)
+    containerDiv.appendChild(stylesheetLink)
 
-	_showError(el: HTMLElement, gistIDAndFilename: String) {
-		el.createEl('pre', { text: `Failed to load the Gist (${gistIDAndFilename}).` })
-	}
+    // insert into the DOM
+    el.appendChild(containerDiv)
+  }
+
+  async _showError(el: HTMLElement, gistIDAndFilename: String) {
+    el.createEl('pre', { text: `Failed to load the Gist (${gistIDAndFilename}).` })
+  }
 }
