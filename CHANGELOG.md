@@ -2,6 +2,8 @@
 
 ## master
 
+- Fixes the async chain.
+
 ## 0.4.0
 
 - Allow to render a gist with full URL.
