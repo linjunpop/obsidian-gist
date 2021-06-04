@@ -60,22 +60,26 @@ export default class GistPlugin extends Plugin {
   }
 
   async _insertGistElement(el: HTMLElement, gistJSON: GistJSON) {
-    // build div
-    const divEl = document.createElement('div');
-    divEl.innerHTML = gistJSON.div
+    // container
+    const container = document.createElement('iframe');
+
+    const containerStyle = `
+      width: 100%;
+      height: auto;
+      border: 0;
+    `
+    container.setAttribute('style', containerStyle)
 
     // build stylesheet link
     const stylesheetLink = document.createElement('link');
     stylesheetLink.rel = "stylesheet";
     stylesheetLink.href = gistJSON.stylesheet
 
-    // container
-    const containerDiv = document.createElement('section');
-    containerDiv.appendChild(divEl)
-    containerDiv.appendChild(stylesheetLink)
+    // Inject content into the iframe
+    container.srcdoc = `${stylesheetLink.outerHTML} \n ${gistJSON.div}`
 
     // insert into the DOM
-    el.appendChild(containerDiv)
+    el.appendChild(container)
   }
 
   async _showError(el: HTMLElement, gistIDAndFilename: String) {
