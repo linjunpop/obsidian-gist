@@ -63,12 +63,22 @@ export default class GistPlugin extends Plugin {
     // container
     const container = document.createElement('iframe');
 
+    // container style
     const containerStyle = `
       width: 100%;
-      height: auto;
       border: 0;
     `
     container.setAttribute('style', containerStyle)
+
+    // auto adjust container height
+    const innerStyle = `
+      <style>
+        html, body {
+          margin: 0;
+          padding: 0;
+        }
+      </style>
+    `
 
     // build stylesheet link
     const stylesheetLink = document.createElement('link');
@@ -76,7 +86,8 @@ export default class GistPlugin extends Plugin {
     stylesheetLink.href = gistJSON.stylesheet
 
     // Inject content into the iframe
-    container.srcdoc = `${stylesheetLink.outerHTML} \n ${gistJSON.div}`
+    container.srcdoc = `${stylesheetLink.outerHTML} \n ${gistJSON.div} \n ${innerStyle}`
+    container.setAttribute('onload', 'this.height=this.contentDocument.body.scrollHeight;')
 
     // insert into the DOM
     el.appendChild(container)
