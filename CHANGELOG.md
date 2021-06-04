@@ -3,6 +3,7 @@
 ## master
 
 - Fixes the async chain.
+- Embed every gist into a iFrame so it will prevent DOM injection.
 
 ## 0.4.0
 
