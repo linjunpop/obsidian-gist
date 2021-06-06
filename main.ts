@@ -63,13 +63,6 @@ export default class GistPlugin extends Plugin {
     // container
     const container = document.createElement('iframe');
 
-    // container style
-    const containerStyle = `
-      width: 100%;
-      border: 0;
-    `
-    container.setAttribute('style', containerStyle)
-
     // auto adjust container height
     const innerStyle = `
       <style>

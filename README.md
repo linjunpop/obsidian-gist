@@ -39,7 +39,7 @@ linjunpop/30efbfd874fb1a16176d3f638a1e712a#math.ex
 
 ### Manually installing the plugin
 
-- Copy over `main.js`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/obsidian-gist/`.
+- Copy over `main.js`, `manifest.json`, `styles.css` to your vault `VaultFolder/.obsidian/plugins/obsidian-gist/`.
 
 ## Development
 
@@ -57,5 +57,5 @@ linjunpop/30efbfd874fb1a16176d3f638a1e712a#math.ex
 - Update the `manifest.json` with a new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
 - Update the `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
 - Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`.
-- Upload the files `manifest.json`, `main.js` as binary attachments.
+- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments.
 - Publish the release.

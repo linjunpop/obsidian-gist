@@ -2,6 +2,8 @@
 
 ## master
 
+- Move container style to `styles.css`.
+
 ## 0.5.0
 
 - Fixes the async chain.
