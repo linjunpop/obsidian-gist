@@ -29,7 +29,6 @@ export default class GistPlugin extends Plugin {
   // private
 
   async _processGist(el: HTMLElement, gist: string) {
-    // const [gistId, fileName] = gistIDAndFilename.split('#')
     const pattern = /(?<protocol>https?:\/\/)?(?<host>gist\.github\.com\/)?((?<username>\w+)\/)?(?<gistID>\w+)(\#(?<filename>.+))?/
 
     const matchResult = gist.match(pattern).groups
