@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.6.0
+
 - Move container style to `styles.css`.
 
 ## 0.5.0
