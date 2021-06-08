@@ -15,9 +15,9 @@ export default class GistPlugin extends Plugin {
     this.registerMarkdownCodeBlockProcessor("gist", async (sourceString: string, el, ctx) => {
       const gists = sourceString.trim().split("\n")
 
-      await Promise.all(
+      return Promise.all(
         gists.map(async (gist) => {
-          this._processGist(el, gist)
+          return this._processGist(el, gist)
         })
       )
     });
@@ -34,8 +34,7 @@ export default class GistPlugin extends Plugin {
     const matchResult = gist.match(pattern).groups
 
     if (matchResult.gistID === undefined) {
-      this._showError(el, gist)
-      return
+      return this._showError(el, gist)
     }
 
     let gistURL = `https://gist.github.com/${matchResult.gistID}.json`
@@ -49,12 +48,12 @@ export default class GistPlugin extends Plugin {
 
       if (response.ok) {
         const gistJSON = await response.json()
-        await this._insertGistElement(el, gistJSON as GistJSON)
+        return this._insertGistElement(el, gistJSON as GistJSON)
       } else {
-        await this._showError(el, gist)
+        return this._showError(el, gist)
       }
     } catch (error) {
-      await this._showError(el, gist)
+      return this._showError(el, gist)
     }
   }
 
