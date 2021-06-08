@@ -77,8 +77,24 @@ export default class GistPlugin extends Plugin {
     stylesheetLink.rel = "stylesheet";
     stylesheetLink.href = gistJSON.stylesheet
 
+    // build link hacker
+    const parentLinkHack = document.createElement('base')
+    parentLinkHack.target = "_parent"
+
     // Inject content into the iframe
-    container.srcdoc = `${stylesheetLink.outerHTML} \n ${gistJSON.div} \n ${innerStyle}`
+    container.srcdoc = `
+      <head>
+        ${stylesheetLink.outerHTML}
+        ${parentLinkHack.outerHTML}
+
+        ${innerStyle}
+      </head>
+
+      <html>
+        ${gistJSON.div}
+      </html>
+    `
+    container.setAttribute('sandbox', 'allow-same-origin allow-top-navigation-by-user-activation')
     container.setAttribute('onload', 'this.height=this.contentDocument.body.scrollHeight;')
 
     // insert into the DOM

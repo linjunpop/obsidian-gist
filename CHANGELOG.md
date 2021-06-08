@@ -2,6 +2,8 @@
 
 ## master
 
+- Fixes the link in the gist view will be opened in the iFrame.
+
 ## 0.6.0
 
 - Move container style to `styles.css`.
