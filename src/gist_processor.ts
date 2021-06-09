@@ -17,30 +17,22 @@ class GistProcessor {
   constructor() {
   }
 
-  injectContainerHeightAdjustmentScript = () => {
-    const containerHeightAdjustmentScript = document.createElement('script')
-    containerHeightAdjustmentScript.id = `${pluginName}-container-height-adjustment`
-    containerHeightAdjustmentScript.textContent = `
-      window.addEventListener("message", (messageEvent) => {
-        const sender = messageEvent.data.sender
+  messageEventHandler = (messageEvent: MessageEvent) => {
+    if (messageEvent.origin !== 'null') {
+      // a message received from the iFrame with `srcdoc` attribute, the `origin` will be `null`.
+      return;
+    }
 
-        if (messageEvent.origin !== 'null') {
-          // a message received from the iFrame with \`srcdoc\` attribute, the \`origin\` will be \`null\`.
-          return;
-        }
+    const sender = messageEvent.data.sender
 
-        // only process message coming from this plugin
-        if (sender === '${pluginName}') {
-          const gistUUID = messageEvent.data.gistUUID
-          const contentHeight = messageEvent.data.contentHeight
+    // only process message coming from this plugin
+    if (sender === pluginName) {
+      const gistUUID = messageEvent.data.gistUUID
+      const contentHeight = messageEvent.data.contentHeight
 
-          const gistContainer = document.querySelector('iframe#' + gistUUID)
-          gistContainer.height = contentHeight
-        }
-      }, false)
-    `
-
-    document.head.appendChild(containerHeightAdjustmentScript)
+      const gistContainer: HTMLElement = document.querySelector('iframe#' + gistUUID)
+      gistContainer.setAttribute('height', contentHeight)
+    }
   }
 
   processor = async (sourceString: string, el: HTMLElement) => {
@@ -55,7 +47,7 @@ class GistProcessor {
 
   // private
 
-  async _processGist(el: HTMLElement, gistString: string) {
+  private async _processGist(el: HTMLElement, gistString: string) {
     const pattern = /(?<protocol>https?:\/\/)?(?<host>gist\.github\.com\/)?((?<username>\w+)\/)?(?<gistID>\w+)(\#(?<filename>.+))?/
 
     const matchResult = gistString.match(pattern).groups
@@ -86,7 +78,7 @@ class GistProcessor {
     }
   }
 
-  async _insertGistElement(el: HTMLElement, gistID: string, gistJSON: GistJSON) {
+  private async _insertGistElement(el: HTMLElement, gistID: string, gistJSON: GistJSON) {
     // generate an uuid for each gist element
     const gistUUID = `${pluginName}-${gistID}-${nanoid()}`
 
@@ -159,7 +151,7 @@ class GistProcessor {
     el.appendChild(container)
   }
 
-  async _showError(el: HTMLElement, gistIDAndFilename: String, errorMessage: String = '') {
+  private async _showError(el: HTMLElement, gistIDAndFilename: String, errorMessage: String = '') {
     const errorText = `
 Failed to load the Gist (${gistIDAndFilename}).
 
@@ -170,8 +162,6 @@ Error:
 
     el.createEl('pre', { text: errorText })
   }
-
-
 }
 
 export { GistProcessor }
