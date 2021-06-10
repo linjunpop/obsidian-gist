@@ -37,9 +37,15 @@ linjunpop/30efbfd874fb1a16176d3f638a1e712a#math.ex
 
 ## Installation
 
+### Installing from the Obsidian App
+
+Search "Gist" in __Settings__ -> __Community plugins__, you can find and install this plugin.
+
+You can check https://help.obsidian.md/Advanced+topics/Third-party+plugins#Discover+and+install+community+plugins for an official guide.
+
 ### Manually installing the plugin
 
-- Copy over `main.js`, `manifest.json`, `styles.css` to your vault `VaultFolder/.obsidian/plugins/obsidian-gist/`.
+Find the latest release: https://github.com/linjunpop/obsidian-gist/releases, then copy over `main.js`, `manifest.json`, `styles.css` to your vault's `.obsidian/plugins/obsidian-gist` directory (ex. `VaultFolder/.obsidian/plugins/obsidian-gist/`).
 
 ## Development
 
