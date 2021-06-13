@@ -1,12 +1,14 @@
 import { Plugin } from 'obsidian';
 import { GistProcessor } from './gist_processor';
+import { GistView } from './gist_view';
 
 export default class GistPlugin extends Plugin {
   async onload() {
-    const gistProcessor = new GistProcessor()
+    window.customElements.define(
+      'gist-view',
+      GistView
+    );
 
-    this.registerDomEvent(window, "message", gistProcessor.messageEventHandler)
-
-    this.registerMarkdownCodeBlockProcessor("gist", gistProcessor.processor)
+    this.registerMarkdownCodeBlockProcessor("gist", GistProcessor.default().processor)
   }
 }
