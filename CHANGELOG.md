@@ -2,6 +2,8 @@
 
 ## master
 
+# 0.8.0
+
 - Allow to override the Gist's default stylesheet. (Fixes #2)
 
 # 0.7.0
