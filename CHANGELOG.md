@@ -2,13 +2,15 @@
 
 ## master
 
+## 0.8.1
+
 - Fixes the settings will be loaded incorrectly.
 
-# 0.8.0
+## 0.8.0
 
 - Allow to override the Gist's default stylesheet. (Fixes #2)
 
-# 0.7.0
+## 0.7.0
 
 - Fixes the link in the gist view will be opened in the iFrame.
 - Use the `postMessage` mechanism to set the iFrame's height, which should be much secure.
