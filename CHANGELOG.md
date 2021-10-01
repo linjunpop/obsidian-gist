@@ -2,6 +2,8 @@
 
 ## master
 
+- Fixes the settings will be loaded incorrectly.
+
 # 0.8.0
 
 - Allow to override the Gist's default stylesheet. (Fixes #2)

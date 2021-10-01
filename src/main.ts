@@ -52,7 +52,7 @@ class GistSettingTab extends PluginSettingTab {
       .setDesc('Override the default stylesheet')
       .addTextArea(text => text
         .setPlaceholder('Paste your custom stylesheet here')
-        .setValue('')
+        .setValue(this.plugin.settings.styleSheet)
         .onChange(async (value) => {
           this.plugin.settings.styleSheet = value;
           await this.plugin.saveSettings();
