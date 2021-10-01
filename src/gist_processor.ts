@@ -1,5 +1,7 @@
 import { nanoid } from 'nanoid';
 
+import GistPluginSettings from './settings';
+
 type GistJSON = {
   description: string,
   public: Boolean,
@@ -14,7 +16,10 @@ const pluginName = "obsidian-gist"
 const obsidianAppOrigin = 'app://obsidian.md'
 
 class GistProcessor {
-  constructor() {
+  settings: GistPluginSettings
+
+  constructor(settings: GistPluginSettings) {
+    this.settings = settings
   }
 
   messageEventHandler = (messageEvent: MessageEvent) => {
@@ -128,6 +133,12 @@ class GistProcessor {
     const parentLinkHack = document.createElement('base')
     parentLinkHack.target = "_parent"
 
+    // custom stylesheet
+    let customStylesheet = ""
+    if (this.settings.styleSheet && this.settings.styleSheet.length > 0) {
+      customStylesheet = this.settings.styleSheet
+    }
+
     // Inject content into the iframe
     container.srcdoc = `
       <html>
@@ -139,6 +150,11 @@ class GistProcessor {
 
           <!-- gist style -->
           ${stylesheetLink.outerHTML}
+
+          <!-- custom style -->
+          <style>
+            ${customStylesheet}
+          </style>
         </head>
 
         <body>

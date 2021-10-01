@@ -2,6 +2,8 @@
 
 ## master
 
+- Allow to override the Gist's default stylesheet. (Fixes #2)
+
 # 0.7.0
 
 - Fixes the link in the gist view will be opened in the iFrame.
