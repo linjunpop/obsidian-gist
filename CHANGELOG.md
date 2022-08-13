@@ -2,6 +2,10 @@
 
 ## master
 
+## 0.9.0
+
+⚠️
+
 - Set the minimum required Obsidian version to `0.15.0`.
 
 ## 0.8.1

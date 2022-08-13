@@ -1,6 +1,6 @@
 {
   "name": "obsidian-gist",
-  "version": "0.12.0",
+  "version": "0.9.0",
   "description": "This is a plugin to display the GitHub Gist (https://gist.github.com) in Obsidian (https://obsidian.md).",
   "main": "main.js",
   "scripts": {
