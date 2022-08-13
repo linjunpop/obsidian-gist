@@ -2,6 +2,8 @@
 
 ## master
 
+- Set the minimum required Obsidian version to `0.15.0`.
+
 ## 0.8.1
 
 - Fixes the settings will be loaded incorrectly.
