@@ -53,7 +53,7 @@ class GistProcessor {
   // private
 
   private async _processGist(el: HTMLElement, gistString: string) {
-    const pattern = /(?<protocol>https?:\/\/)?(?<host>gist\.github\.com\/)?((?<username>\w+)\/)?(?<gistID>\w+)(\#(?<filename>.+))?/
+    const pattern = /(?<protocol>https?:\/\/)?(?<host>gist\.github\.com\/)?((?<username>[\w-]+)\/)?(?<gistID>\w+)(\#(?<filename>.+))?/
 
     const matchResult = gistString.match(pattern).groups
 

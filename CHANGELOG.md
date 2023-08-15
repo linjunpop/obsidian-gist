@@ -2,6 +2,8 @@
 
 ## master
 
+- Fixes gist won't render when the username contains character `-`. (Fixes #7)
+
 ## 0.9.0
 
 ⚠️
