@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 
 import GistPluginSettings from './settings';
+import {request, RequestUrlParam} from "obsidian";
 
 type GistJSON = {
   description: string,
@@ -69,15 +70,17 @@ class GistProcessor {
       gistURL = `${gistURL}?file=${matchResult.filename}`
     }
 
-    try {
-      const response = await fetch(gistURL)
-
-      if (response.ok) {
-        const gistJSON = await response.json() as GistJSON
-        return this._insertGistElement(el, gistID, gistJSON)
-      } else {
-        return this._showError(el, gistString, `Could not fetch the Gist info from GitHub server. (Code: ${response.status})`)
+    const urlParam: RequestUrlParam = {
+      url: gistURL,
+      method: "GET",
+      headers: {
+        "Accept": "application/json"
       }
+    }
+    try {
+      const res = await request(urlParam)
+      const gistJSON = JSON.parse(res) as GistJSON
+      return this._insertGistElement(el, gistID, gistJSON)
     } catch (error) {
       return this._showError(el, gistString, `Could not fetch the Gist from GitHub server. (Error: ${error})`)
     }
