@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.10.0
+
 - Fixes the gist style will be blocked by CSP.
 - Fixed CORS issues (#9).
 
