@@ -2,9 +2,12 @@
 
 ## master
 
+- Fixes the gist style will be blocked by CSP.
+- Fixed CORS issues (#9).
+
 ## 0.9.1
 
-- Fixes gist won't render when the username contains character `-`. (Fixes #7)
+- Fixes gist won't render when the username contains character `-`. (Fixes #7).
 
 ## 0.9.0
 

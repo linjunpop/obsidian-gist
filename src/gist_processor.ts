@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 
 import GistPluginSettings from './settings';
-import {request, RequestUrlParam} from "obsidian";
+import { request, RequestUrlParam } from "obsidian";
 
 type GistJSON = {
   description: string,
@@ -96,6 +96,7 @@ class GistProcessor {
     container.classList.add(`${pluginName}-container`)
     container.setAttribute('sandbox', 'allow-scripts allow-top-navigation-by-user-activation')
     container.setAttribute('loading', 'lazy')
+    // container.setAttribute('csp', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://github.githubassets.com;")
 
     // reset the default things on HTML
     const resetStylesheet = `
@@ -127,14 +128,12 @@ class GistProcessor {
       </script>
     `
 
-    // build stylesheet link
-    const stylesheetLink = document.createElement('link');
-    stylesheetLink.rel = "stylesheet";
-    stylesheetLink.href = gistJSON.stylesheet
-
     // hack to make links open in the parent 
     const parentLinkHack = document.createElement('base')
     parentLinkHack.target = "_parent"
+
+    // load stylesheet as text
+    const stylesheetText = await this._loadStylesheet(el, gistID, gistJSON.stylesheet);
 
     // custom stylesheet
     let customStylesheet = ""
@@ -151,8 +150,10 @@ class GistProcessor {
           ${parentLinkHack.outerHTML}
           ${heightAdjustmentScript}
 
-          <!-- gist style -->
-          ${stylesheetLink.outerHTML}
+          <!-- gist embedded style -->
+          <style>
+            ${stylesheetText}
+          </style>
 
           <!-- custom style -->
           <style>
@@ -180,6 +181,23 @@ Error:
     `.trim()
 
     el.createEl('pre', { text: errorText })
+  }
+
+  private async _loadStylesheet(el: HTMLElement, gistString: String, url: string) {
+    const urlParam: RequestUrlParam = {
+      url: url,
+      method: "GET",
+      headers: {
+        "Accept": "text/css"
+      }
+    }
+
+    try {
+      const res = await request(urlParam)
+      return res;
+    } catch (error) {
+      return this._showError(el, gistString, `Could not fetch the Gist Style from GitHub server. (Error: ${error})`)
+    }
   }
 }
 
