@@ -149,6 +149,18 @@
                 "file": "Note with gist.md"
               }
             }
+          },
+          {
+            "id": "380e479fa0ffdeec",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              }
+            }
           }
         ]
       }
